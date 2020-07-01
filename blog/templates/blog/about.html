@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+
+</head>
+<body>
+
+<div id="app">
+  <p>[[message]]</p>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+var app = new Vue({
+    delimiters: ['[[', ']]'],
+  el: '#app',
+  data: {
+    message: 'I am using Vue js in django template'
+  }
+})
+</script>
+</body>
+</html>

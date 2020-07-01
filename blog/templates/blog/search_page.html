@@ -1,0 +1,119 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="container-viewport">
+<form method="GET" action="{% url 'filter_result' %}">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+     <input type="text" name="title" class="form-control" id="" placeholder="I am looking for..">
+    </div>
+    <div class="form-group col-md-6">
+        <select id="Catagory" name="Catagory" class="form-control">
+        <option selected>Catagory</option>
+        <option>Cow</option>
+          <option>Goat</option>
+          <option>Vegetables</option><option>Birds</option><option>Plants</option>
+          <option>Cat</option><option>Dog</option><option>Others</option>
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+  <input type="text" name="district" class="form-control"  placeholder="Please enter exact district name">
+    </div>
+    <div class="form-group col-md-4">
+   <select id="inputState" name="state" class="form-control">
+        <option selected>Choose State</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+<option value="Daman and Diu">Daman and Diu</option>
+<option value="Delhi">Delhi</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Lakshadweep">Lakshadweep</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Orissa">Orissa</option>
+<option value="Pondicherry">Pondicherry</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttaranchal">Uttaranchal</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="West Bengal">West Bengal</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <input type="number" name="price" class="form-control" id="inputZip" placeholder="Max.Price">
+    </div>
+  </div>
+  <div class="form-group">
+
+  </div>
+  <button type="submit" class="btn btn-primary mb-1">Search</button>
+
+</form>
+
+<div class="container-fluid">
+  <div class="row">
+    {% for post in queryset %}
+    <div class="col-md-3 border">
+      {% if post.userimage or post.userimage2 or post.userimage3 %}
+                   {% if post.userimage != 'default1.jpg' %}
+                      <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage.url }}" >
+                  {% elif post.userimage2 != 'default1.jpg' %}
+                      <img  class="img-fluid mx-auto d-block mt-1"  style="height: 200px;width: auto;" src="{{ post.userimage2.url }}" >
+                  {% elif post.userimage3 != 'default1.jpg' %}
+                    <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage3.url }}" >  
+                  {% else %}
+                      <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage3.url }}" >            
+                  {% endif %}
+        {% endif %}
+        <div style="overflow-wrap: break-word;">
+          <h5 class="mt-1">Rs - {{post.price}} </h5>
+              <h6 style="color: darkblue"><a href="{% url 'post-detail' post.id %}">{{ post.title|slice:":40"}}</a> </h6>
+              <p>{{ post.date_posted|date:"F d, Y" }} - {{ post.district }}</p>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+</div>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if queryset.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">&laquo; first</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="btn btn-outline-info mb-4" class="current">
+            Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}.
+        </span>
+
+        {% if queryset.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.next_page_number }}">next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+</div></div>
+{% endblock %}

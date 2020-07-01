@@ -1,0 +1,120 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<form method="GET" action="{% url 'filter_result' %}">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+     <input type="text" name="title" class="form-control" id="" placeholder="I am looking for..">
+    </div>
+    <div class="form-group col-md-6">
+        <select id="Catagory" name="Catagory" class="form-control">
+        <option selected>Catagory</option>
+        <option>Cow</option>
+          <option>Goat</option>
+          <option>Vegetables</option><option>Birds</option><option>Plants</option>
+          <option>Cat</option><option>Dog</option><option>Others</option>
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+  <input type="text" name="district" class="form-control"  placeholder="Please enter exact district name">
+    </div>
+    <div class="form-group col-md-4">
+   <select id="inputState" name="state" class="form-control">
+        <option selected>Choose State</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Dadra and Nagar Haveli">Dadra and Nagar Haveli</option>
+<option value="Daman and Diu">Daman and Diu</option>
+<option value="Delhi">Delhi</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Lakshadweep">Lakshadweep</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Orissa">Orissa</option>
+<option value="Pondicherry">Pondicherry</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttaranchal">Uttaranchal</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="West Bengal">West Bengal</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <input type="number" name="price" class="form-control" id="inputZip" placeholder="Max.Price">
+    </div>
+  </div>
+  <div class="form-group">
+
+  </div>
+  <button type="submit" class="btn btn-primary">Search</button>
+
+</form>
+
+
+<div style="margin-top: 2%">
+
+<div class="container-fluid" style="background-color: white">
+ {% for post in queryset %}
+
+
+     <div class="row" style="border-bottom: 1px solid black">
+            <div class="col-md-12">
+                <div class="p-1">
+                <h5 style="color: darkorange">Rs.{{post.price}},
+               <span> <a style="color: darkblue" class="" href="{% url 'post-detail' post.id %}">{{ post.title|slice:":105"}}</a> </span></h5>
+                <h6>{{ post.date_posted|date:"F d, Y" }} - {{ post.district }}</h6>
+                <p>{{ post.content|slice:":60" }}</p>
+
+              </div>
+            </div>
+         </div>
+
+    {% endfor %}
+
+</div>
+ {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+    {% for post in queryset %}
+    <div class="col-md-3 border">
+      {% if post.userimage or post.userimage2 or post.userimage3 %}
+                   {% if post.userimage != 'default1.jpg' %}
+                      <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage.url }}" >
+                  {% elif post.userimage2 != 'default1.jpg' %}
+                      <img  class="img-fluid mx-auto d-block mt-1"  style="height: 200px;width: auto;" src="{{ post.userimage2.url }}" >
+                  {% elif post.userimage3 != 'default1.jpg' %}
+                    <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage3.url }}" >  
+                  {% else %}
+                      <img  class="img-fluid mx-auto d-block mt-1" style="height: 200px;width: auto;" src="{{ post.userimage3.url }}" >            
+                  {% endif %}
+        {% endif %}
+        <div style="overflow-wrap: break-word;">
+          <h5 class="mt-1">Rs - {{post.price}} </h5>
+              <h6 style="color: darkblue"><a  href="{% url 'post-detail' post.id %}">{{ post.title|slice:":40"}}</a> </h6>
+              <p>{{ post.date_posted|date:"F d, Y" }} - {{ post.district }}</p>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+</div>
+    <div class="pagination">
+    <span class="step-links">
+        {% if queryset.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">&laquo; first</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="btn btn-outline-info mb-4" class="current">
+            Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}.
+        </span>
+
+        {% if queryset.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.next_page_number }}">next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ queryset.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+</div>
+{% endblock %}

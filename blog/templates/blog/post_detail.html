@@ -1,0 +1,65 @@
+{% extends "blog/base.html" %}
+{% block content %}
+   <div class="container-viewport" style="border-color: royalblue">
+    <h3 class="article-title">{{ object.title }} </h3>
+    <h5 class="article-content">Posted : <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ object.author }}</a></h5>
+    <h6>Date Posted : <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small> </h6>
+   <h6>Catagory:{{ object.Catagory }} District: {{ object.district }} State: {{ object.state }} </h6>
+   <h5>Phone : {{ object.phonenumber }} </h5>
+       {% if object.author == user %}
+           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+        {% endif %}
+       <p class="flex-wrap">{{ object.content }} </p>
+   <div class="row">
+
+{% if post.userimage == 'default1.jpg' %}
+  {{pass}}
+{% else %}
+  <div><img  class="img-wrap m-1 img-fluid" src="{{ post.userimage.url }}" ></div>
+{% endif %} 
+{% if post.userimage2 == 'default1.jpg' %}
+  {{pass}}
+{% else %}
+  <div><img  class="img-wrap m-1 img-fluid" src="{{ post.userimage2.url }}" ></div>
+{% endif %}  
+{% if post.userimage3 == 'default1.jpg' %}
+  {{pass}}
+{% else %}
+  <div><img  class="img-wrap m-1 img-fluid" src="{{ post.userimage3.url }}" ></div>
+{% endif %}     
+       
+   </div>
+   </div>
+<div>
+<!--comments begins here -->
+<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+{% for comment in post.comments.all %}
+    {% if user.is_authenticated or comment.approved_comment %}
+    <div class="comment">
+        <div class="date">
+            {{ comment.created_date }}
+            {% if not comment.approved_comment %}
+                <a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                <a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+            {% endif %}
+        </div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+    {% endif %}
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
+</div>
+
+<button class="btn btn-secondary mt-1" onclick="goBack()">Go Back</button>
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+
+
+
+{% endblock content %}
